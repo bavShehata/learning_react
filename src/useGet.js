@@ -7,19 +7,30 @@ const useGet = (url) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then((res) => {
-        setData(res.data);
-        setIsPending(false);
-        setError(null);
-      })
-      .catch((e) => {
-        console.log("Couldn't load data\n", e);
-        setError(e.message);
-        setIsPending(false);
-      });
-  }, []);
+    const cancelTokenSource = axios.CancelToken.source();
+    setTimeout(() => {
+      axios
+        .get(url, {
+          cancelToken: cancelTokenSource.token,
+        })
+        .then((res) => {
+          setData(res.data);
+          setIsPending(false);
+          setError(null);
+        })
+        .catch((e) => {
+          if (axios.isCancel(e)) {
+            console.log('The GET Request got cancelled');
+          } else {
+            console.log("Couldn't load data\n", e);
+            setError(e.message);
+            setIsPending(false);
+          }
+        });
+    }, 1000);
+
+    return () => cancelTokenSource.cancel();
+  }, [url]);
   return { data, isPending, error };
 };
 
