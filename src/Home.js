@@ -3,11 +3,9 @@ import BlogList from './BlogList';
 import useGet from './useGet';
 
 const Home = () => {
-  let url = 'http://localhost:8001/blogs';
+  const url = 'http://localhost:8001/blogs';
   const { data: blogs, isPending, error } = useGet(url);
-  //   useEffect(() => {
-  //     useGet(url);
-  //   }, [url]);
+
   return (
     <div className="home">
       {error && <div>{error}</div>}
