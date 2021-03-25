@@ -10,8 +10,6 @@ const Home = () => {
   //   }, [url]);
   return (
     <div className="home">
-      <h1>Dojo Blogs</h1>
-      <p>Where all ninjas write their stuff</p>
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {blogs && <BlogList blogs={blogs} title={'All blogs'} />}
