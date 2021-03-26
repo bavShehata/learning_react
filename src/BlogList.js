@@ -1,18 +1,19 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const BlogList = ({ blogs, title }) => {
-  const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:8001/blogs/${id}`)
-      .then(() => {
-        console.log('Blog deleted');
-        window.location.reload();
-      })
-      .catch((e) => {
-        console.log("Blog couldn't get deleted\n", e);
-      });
-  };
+// TODO: deleting a blog from home page shouldn't reload the page, but rather call the useEffect hook
+const BlogList = ({ blogs, title, handleDelete }) => {
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`http://localhost:8001/blogs/${id}`)
+  //     .then(() => {
+  //       console.log('Blog deleted');
+  //       window.location.reload();
+  //     })
+  //     .catch((e) => {
+  //       console.log("Blog couldn't get deleted\n", e);
+  //     });
+  // };
   return (
     <div className="blog-list">
       <h1>{title}</h1>
@@ -25,7 +26,7 @@ const BlogList = ({ blogs, title }) => {
             </Link>
             <button
               onClick={() => {
-                handleDelete(blog.id);
+                handleDelete(blog.id, 0);
               }}
             >
               Delete blog

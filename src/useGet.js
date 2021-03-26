@@ -1,10 +1,25 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 const useGet = (url) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+  const history = useHistory();
+  const handleDelete = (id, homepage = 0) => {
+    axios
+      .delete(`http://localhost:8001/blogs/${id}`)
+      .then(() => {
+        console.log('Blog deleted');
+        if (homepage) {
+          history.push('/');
+        }
+      })
+      .catch((e) => {
+        console.log("Blog couldn't get deleted\n", e);
+      });
+  };
 
   useEffect(() => {
     const cancelTokenSource = axios.CancelToken.source();
@@ -28,8 +43,8 @@ const useGet = (url) => {
       });
 
     return () => cancelTokenSource.cancel();
-  }, [url]);
-  return { data, isPending, error };
+  }, [url, handleDelete]);
+  return { data, isPending, error, handleDelete };
 };
 
 export default useGet;

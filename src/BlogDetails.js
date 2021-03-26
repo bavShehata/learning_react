@@ -5,19 +5,19 @@ import useGet from './useGet';
 const BlogDetails = () => {
   const { id } = useParams();
   const url = `http://localhost:8001/blogs/${id}`;
-  const { data: blog, isPending, error } = useGet(url);
+  const { data: blog, isPending, error, handleDelete } = useGet(url);
   const history = useHistory();
-  const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:8001/blogs/${id}`)
-      .then(() => {
-        console.log('Blog deleted');
-        history.push('/');
-      })
-      .catch((e) => {
-        console.log("Blog couldn't get deleted\n", e);
-      });
-  };
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`http://localhost:8001/blogs/${id}`)
+  //     .then(() => {
+  //       console.log('Blog deleted');
+  //       history.push('/');
+  //     })
+  //     .catch((e) => {
+  //       console.log("Blog couldn't get deleted\n", e);
+  //     });
+  // };
   return (
     <div className="blog-details">
       {error && <div>{error}</div>}
@@ -31,7 +31,7 @@ const BlogDetails = () => {
           </div>
           <button
             onClick={() => {
-              handleDelete(blog.id);
+              handleDelete(blog.id, 1);
             }}
           >
             Delete blog
