@@ -7,11 +7,21 @@ const useGet = (url) => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
   const history = useHistory();
+
+  const objectsEqual = (o1, o2) => {
+    if (o1 && o2) {
+      return JSON.stringify(o1) === JSON.stringify(o2);
+    } else {
+      return false;
+    }
+  };
+
   const handleDelete = (id, homepage = 0) => {
     axios
       .delete(`http://localhost:8001/blogs/${id}`)
       .then(() => {
         console.log('Blog deleted');
+        setData([]);
         if (homepage) {
           history.push('/');
         }
@@ -28,7 +38,12 @@ const useGet = (url) => {
         cancelToken: cancelTokenSource.token,
       })
       .then((res) => {
-        setData(res.data);
+        if (!objectsEqual(res.data, data)) {
+          console.log('object');
+          setData(res.data);
+        }
+        console.log(res.data);
+        console.log(data);
         setIsPending(false);
         setError(null);
       })
@@ -43,7 +58,7 @@ const useGet = (url) => {
       });
 
     return () => cancelTokenSource.cancel();
-  }, [url, handleDelete]);
+  }, [url, data]);
   return { data, isPending, error, handleDelete };
 };
 
